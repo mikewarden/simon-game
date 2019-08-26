@@ -1,4 +1,21 @@
-.App {
-  text-align: center;
+
+
+.boxStyles {
+  width: 200px;
+  height: 200px;
+  display: inline-flex;
+  margin: 2px;
 }
 
+#container {
+  width: 420px;
+  height: 420px;
+  background-color: #000;
+  padding: 20px 8px 8px 20px;
+  border-radius: 10px;
+  margin-left: 30px;
+}
+
+.id-div {
+  padding: 20px;
+}

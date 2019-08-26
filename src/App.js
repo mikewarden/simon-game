@@ -16,10 +16,12 @@ class App extends React.Component {
     return(
       <div id="App">
         <h1>Simon</h1>
-        <Box id={1} bColor="#FF2E0B"/>
-        <Box id={2} bColor="#0DFF1D"/>
-        <Box id={3} bColor="#E8B900"/>
-        <Box id={4} bColor="#007AE8"/>
+        <div id="container">
+        <Box id={1} bColor="#FF2E0B" bRadius="64px 0px 0px 0px"/>
+        <Box id={2} bColor="#0DFF1D" bRadius="0px 64px 0px 0px"/>
+        <Box id={3} bColor="#E8B900" bRadius="0px 0px 0px 64px"/>
+        <Box id={4} bColor="#007AE8" bRadius="0px 0px 64px 0px"/>
+        </div>
       </div>
     )
   }
@@ -27,7 +29,9 @@ class App extends React.Component {
 
 const Box = (props) => {
   return (
-    <div style={{backgroundColor: props.bColor}}>box {props.id}</div>
+    <div onClick={() => console.log("trigger")} className="boxStyles" style={{backgroundColor: props.bColor, borderRadius: props.bRadius}}> <div className="id-div">{props.id}</div>
+    </div>
+
   )
 }
 
