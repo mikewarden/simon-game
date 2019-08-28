@@ -1,45 +1,102 @@
 import React from 'react';
 import './App.css';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
 
+class App extends React.Component{
+  constructor(){
+    super();
+    this.state={
+      compPattern:[],
+      userPattern:[],
+      box1:false,
+      box2:false,
+      box3:false,
+      box4:false
     }
   }
-  //event parameter is accepting props.id as an argument below:
-  handleClick = (id, event) => {
-    console.log(id);
+
+  getRandomInt=(min, max)=>{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 
-  render() {
-    //lightred: #FF8866
-    //lightgreen #70FF8A
-    //light yellow #E8D25A
-    //lightblue #5A96E8
+  addRandomNum=()=>{
+    let randNum = this.getRandomInt(1,5);
+    this.setState({
+      compPattern: [...this.state.compPattern, randNum]
+    })
+  }
+
+  componentDidMount(){
+    this.addRandomNum();
+  }
+
+  componentDidUpdate() {
+     let inputArr = this.state.userPattern;
+    let compArr = this.state.compPattern;
+    for (let i = 0; i < inputArr.length; i++) {
+      if (inputArr[i] === compArr[i]) {
+        
+        if (compArr.length  <= inputArr.length) {
+          this.addRandomNum();
+          this.showPattern();
+        }
+      } else {
+        console.log(false);
+      }
+    }
+    
+  }
+
+  showPattern=(currPat)=>{
+    for(let i=0;i<currPat.length;i++){
+      setTimeout(()=>{
+        this.setState({["box"+currPat[i]]: true});
+        setTimeout(()=>{
+          this.setState({["box"+currPat[i]]: false});
+        }, 500)
+      }, 800*i)
+    }
+  }
+
+ handleClick=(id)=>{
+    this.setState({
+      userPattern: [...this.state.userPattern, id]
+    });
+  }
+  startFunc=()=>{
+    let compPat = this.state.compPattern;
+    this.showPattern(compPat);
+  }
+  render(){
+    console.log(this.state.compPattern, this.state.userPattern)
     return(
-      <div id="App">
+      <div>
         <h1>Simon</h1>
         <div id="container">
-        <Box handleClick={this.handleClick} id={1} bColor="#FF2E0B" bRadius="64px 0px 0px 0px"/>
-        <Box handleClick={this.handleClick} id={2} bColor="#0DFF1D" bRadius="0px 64px 0px 0px"/>
-        <Box handleClick={this.handleClick} id={3} bColor="#E8B900" bRadius="0px 0px 0px 64px"/>
-        <Box handleClick={this.handleClick} id={4} bColor="#007AE8" bRadius="0px 0px 64px 0px"/>
+          <Box active={this.state.box1} handleClick={this.handleClick} id={1} color={{num1:255, num2:0, num3:0}} bRad="80px 0px 0px 0px"/>
+          <Box active={this.state.box2} handleClick={this.handleClick} id={2} color={{num1:0, num2:255, num3:0}} bRad="0px 80px 0px 0px"/>
+          <Box active={this.state.box4} handleClick={this.handleClick} id={4} color={{num1:255, num2:255, num3:0}} bRad="0px 0px 0px 80px"/>
+          <Box active={this.state.box3} handleClick={this.handleClick} id={3} color={{num1:0, num2:0, num3:255}} bRad="0px 0px 80px 0px"/>
         </div>
+          <button onClick={this.startFunc}>Start Game</button>
       </div>
     )
   }
 }
 
-//anonymous function is required to trigger handleClick.
-//handleClick accepts props.id as an event argument above.
-const Box = (props) => {
-  return (
-    <div onClick={(event)=> props.handleClick(props.id)} className="boxStyles" style={{backgroundColor: props.bColor, borderRadius: props.bRadius}}> <div className="id-div">{props.id}</div>
-    </div>
+const Box = (props) =>{
+  let opacity = props.active ? ".75" : ".25";
+  let boxStyle = {
+    backgroundColor:"rgba("+ props.color.num1 + "," + props.color.num2 + "," + props.color.num3 + "," + opacity + ")", borderRadius: props.bRad
+  }
 
+  return(
+    <div onClick={()=>{props.handleClick(props.id)}
+  } className="boxStyles" style={boxStyle}>{"box " + props.id}</div>
   )
 }
+
 
 export default App;
